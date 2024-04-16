@@ -10,9 +10,12 @@ module.exports = {
       },
       fontFamily: {
         raleway: [
-          "Raleway",
+          "Quicksand",
           "sans-serif"
         ]
+      },
+      borderWidth: {
+        1: "1px"
       }
     }
   },
