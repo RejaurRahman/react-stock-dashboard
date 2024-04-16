@@ -1,6 +1,7 @@
 import './App.css';
 
 import Card from "./components/Card/Card";
+import Chart from "./components/Chart/Chart";
 
 export default function App() {
   return (
@@ -9,7 +10,7 @@ export default function App() {
         <h1 className="text-5xl">Apple Inc.</h1>
       </div>
       <div className="col-span-2 row-span-4 p-2">
-        <Card />
+        <Chart />
       </div>
       <div className="p-2">
         <Card />
