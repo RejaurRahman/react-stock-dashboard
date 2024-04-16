@@ -2,6 +2,7 @@ import './App.css';
 
 import Card from "./components/Card/Card";
 import Chart from "./components/Chart/Chart";
+import Overview from "./components/Overview/Overview";
 
 export default function App() {
   return (
@@ -13,7 +14,12 @@ export default function App() {
         <Chart />
       </div>
       <div className="p-2">
-        <Card />
+        <Overview
+          symbol={"AAPL"}
+          price={130.63}
+          change={130.63}
+          changePercent={0.67}
+        />
       </div>
       <div className="row-span-3 p-2">
         <Card />
