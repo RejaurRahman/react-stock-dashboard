@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { type } from "@testing-library/user-event/dist/type";
+import React, { useContext, useState } from "react";
 
 import { intradayData } from "../../constants/mock";
 
 import Button from "../Button/Button";
 import Card from "../Card/Card";
+
+import ThemeContext from "../../context/ThemeContext";
 
 import {
   Area,
@@ -20,17 +21,7 @@ export default function Chart() {
 
   const [filter, setFilter] = useState("1D")
 
-  const randomData = () => {
-    let data = []
-    let current = 1000
-
-    for (let i = 0; i < 100; i++) {
-      current += Math.random() * 100 - 50
-      data.push({ time: "11:00 am", value: current })
-    }
-
-    return data
-  }
+  const { darkMode } = useContext(ThemeContext)
 
   const formatData = () => {
     let data = []
@@ -66,13 +57,20 @@ export default function Chart() {
             <linearGradient id="chartColor" x1="0" y1="0" x2="0" y2="1">
               <stop
                 offset="5%"
-                stopColor="rgb(199 210 254)"
+                stopColor={darkMode ? "#312e81" : "rgb(199 210 254)"}
                 stopOpacity={0.8}
               />
-              <stop offset="95%" stopColor="rgb(199 210 254)" stopOpacity={0} />
+              <stop
+                offset="95%"
+                stopColor={darkMode ? "#312e81" : "rgb(199 210 254)"}
+                stopOpacity={0}
+              />
             </linearGradient>
           </defs>
-          <Tooltip />
+          <Tooltip
+            contentStyle={darkMode ? { backgroundColor: "#111827" } : null}
+            itemStyle={darkMode ? { color: "#818cf8" } : null}
+          />
           <Area
             type="monotone"
             dataKey="value"
