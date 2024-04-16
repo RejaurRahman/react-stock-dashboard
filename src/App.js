@@ -1,15 +1,16 @@
 import './App.css';
 
-import Card from "./components/Card/Card";
 import Chart from "./components/Chart/Chart";
 import Details from "./components/Details/Details";
 import Overview from "./components/Overview/Overview";
+import Search from "./components/Search/Search";
 
 export default function App() {
   return (
     <div className="h-screen grid grid-cols-3 grid-rows-5 gap-2 bg-neutral-100 p-8 font-raleway">
       <div className="col-span-3 flex justify-start items-center px-32">
         <h1 className="text-5xl">Apple Inc.</h1>
+        <Search />
       </div>
       <div className="col-span-2 row-span-4 p-2">
         <Chart />
@@ -18,7 +19,7 @@ export default function App() {
         <Overview
           symbol={"AAPL"}
           price={130.63}
-          change={130.63}
+          change={3.63}
           changePercent={0.67}
         />
       </div>

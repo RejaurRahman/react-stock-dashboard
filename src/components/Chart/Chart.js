@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { type } from "@testing-library/user-event/dist/type";
+
+import { intradayData } from "../../constants/mock";
 
 import Button from "../Button/Button";
 import Card from "../Card/Card";
@@ -23,8 +26,20 @@ export default function Chart() {
 
     for (let i = 0; i < 100; i++) {
       current += Math.random() * 100 - 50
-      data.push({ date: "11:00 am", value: current })
+      data.push({ time: "11:00 am", value: current })
     }
+
+    return data
+  }
+
+  const formatData = () => {
+    let data = []
+
+    Object.entries(intradayData["Time Series (5min)"]).forEach((item) => {
+      data.push({ time: item[0], value: item[1]["4. close"] })
+    })
+
+    console.log(data)
 
     return data
   }
@@ -46,7 +61,7 @@ export default function Chart() {
       </ul>
 
       <ResponsiveContainer>
-        <AreaChart data={randomData()}>
+        <AreaChart data={formatData()}>
           <defs>
             <linearGradient id="chartColor" x1="0" y1="0" x2="0" y2="1">
               <stop
@@ -66,8 +81,8 @@ export default function Chart() {
             fillOpacity={1}
             strokeWidth={1}
           />
-          <XAxis dataKey="date" />
-          <YAxis />
+          <XAxis dataKey="time" />
+          <YAxis domain={["dataMin", "dataMax"]} />
         </AreaChart>
       </ResponsiveContainer>
     </Card>
