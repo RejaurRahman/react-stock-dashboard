@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
 
-import { companyDetails } from "../../constants/mock";
-
 import ThemeContext from "../../context/ThemeContext";
 
 import Card from "../Card/Card";

@@ -11,13 +11,14 @@ import Header from "../Header/Header";
 
 import StockContext from "../../context/StockContext";
 
-import { fetchStockDetails } from "../../utils/api/stock-api";
+import { fetchStockDetails, quoteStock } from "../../utils/api/stock-api";
 
 export default function Dashboard() {
   const { darkMode } = useContext(ThemeContext)
-  const { stockSymbol, setStockSymbol } = useContext(StockContext);
+  const { stockSymbol, setStockSymbol } = useContext(StockContext)
 
-  const [stockDetails, setStockDetails] = useState({});
+  const [stockDetails, setStockDetails] = useState({})
+  const [quote, setQuote] = useState({})
 
   useEffect(() => {
     const updateStockDetails = async () => {
@@ -26,8 +27,23 @@ export default function Dashboard() {
       setStockDetails(result)
     }
 
+    const updateStockOverview = async () => {
+      const result = await quoteStock(stockSymbol)
+
+      if (result) {
+        setQuote(result)
+      } else {
+        setQuote({})
+      }
+    }
+
     updateStockDetails()
+    updateStockOverview()
   }, [stockSymbol])
+
+  const formatQuoteAttribute = (attribute) => {
+    return attribute ? attribute : "N/A"
+  }
 
   return (
     <div
@@ -43,10 +59,11 @@ export default function Dashboard() {
       </div>
       <div className="p-2">
         <Overview
-          symbol={"AAPL"}
-          price={130.63}
-          change={3.63}
-          changePercent={0.67}
+          symbol={stockSymbol}
+          price={formatQuoteAttribute(quote.pc)}
+          change={formatQuoteAttribute(quote.d)}
+          changePercent={formatQuoteAttribute(quote.dp)}
+          currency={stockDetails.currency}
         />
       </div>
       <div className="row-span-2 xl:row-span-3 p-2">

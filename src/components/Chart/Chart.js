@@ -1,11 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { intradayData } from "../../constants/mock";
 
 import Button from "../Button/Button";
 import Card from "../Card/Card";
 
+import StockContext from "../../context/StockContext";
 import ThemeContext from "../../context/ThemeContext";
+
+import { fetchHistoricalData } from "../../utils/api/stock-api";
 
 import {
   Area,
@@ -23,15 +26,48 @@ export default function Chart() {
 
   const { darkMode } = useContext(ThemeContext)
 
-  const formatData = () => {
-    let data = []
+  const { stockSymbol } = useContext(StockContext)
 
-    Object.entries(intradayData["Time Series (5min)"]).forEach((item) => {
-      data.push({ time: item[0], value: item[1]["4. close"] })
+  const [data, setData] = useState([])
+
+  const convertDateToUnixTimestamp = (date) => {
+    return Math.floor(date.getTime() / 1000)
+  }
+
+  const formatData = (data) => {
+    return data.c.map((item, index) => {
+      return {
+        value: item.toFixed(2),
+        time: data.t
+      }
     })
 
     return data
   }
+
+  const chartFilters2 = {
+    "1D": { resolution: 1, seconds: 60 * 60 * 24 },
+    "1W": { resolution: 1, seconds: 60 * 60 * 24 },
+    "1M": { resolution: 1, seconds: 60 * 60 * 24 },
+    "1Y": { resolution: 1, seconds: 60 * 60 * 24 }
+  }
+
+  useEffect(() => {
+    const updateChartData = async () => {
+      const today = new Date()
+      const oneDay = 60 * 60 * 24
+
+      const result = await fetchHistoricalData(
+        stockSymbol,
+        convertDateToUnixTimestamp(today) - oneDay,
+        convertDateToUnixTimestamp(today)
+      )
+
+      setData(formatData(result))
+    }
+
+    updateChartData()
+  }, [stockSymbol])
 
   return (
     <Card>
@@ -50,7 +86,7 @@ export default function Chart() {
       </ul>
 
       <ResponsiveContainer>
-        <AreaChart data={formatData()}>
+        <AreaChart data={data}>
           <defs>
             <linearGradient id="chartColor" x1="0" y1="0" x2="0" y2="1">
               <stop
@@ -75,7 +111,7 @@ export default function Chart() {
             stroke="#312e81"
             fill="url(#chartColor)"
             fillOpacity={1}
-            strokeWidth={1}
+            strokeWidth={0.5}
           />
           <XAxis dataKey="time" />
           <YAxis domain={["dataMin", "dataMax"]} />
