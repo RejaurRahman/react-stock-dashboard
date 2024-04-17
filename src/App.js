@@ -7,7 +7,7 @@ import ThemeContext from "./context/ThemeContext";
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false)
-  const [stockSymbol, setStockSymbol] = useState("FB")
+  const [stockSymbol, setStockSymbol] = useState("MSFT")
 
   return (
     <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
