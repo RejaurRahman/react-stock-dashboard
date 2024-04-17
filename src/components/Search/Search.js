@@ -14,15 +14,17 @@ export default function Search() {
   const [bestMatches, setBestMatches] = useState([])
 
   const updateBestMatches = async () => {
-    if (input) {
-      const searchResults = await searchSymbol(input)
-      const result = searchResults.result
+    try {
+      if (input) {
+        const searchResults = await searchSymbol(input)
+        const result = searchResults.result
 
-      if (result) {
         setBestMatches(result)
-      } else {
-        setBestMatches([])
       }
+    } catch (error) {
+      setBestMatches([])
+
+      console.log(error)
     }
   }
 

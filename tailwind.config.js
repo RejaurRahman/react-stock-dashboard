@@ -6,10 +6,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        none: "none",
         white: "#ffffff"
       },
       fontFamily: {
-        raleway: [
+        quicksand: [
           "Quicksand",
           "sans-serif"
         ]

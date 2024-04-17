@@ -8,7 +8,7 @@ export default function ChartFilter({ text, active, onClick }) {
         active
           ? "bg-indigo-600 border-indigo-700 text-gray-100"
           : "border-indigo-300 text-indigo-300"
-      }`}
+      } transition duration-200 hover:bg-indigo-600 hover:text-gray-100 hover:border-indigo-700`}
     >
       {text}
     </button>
