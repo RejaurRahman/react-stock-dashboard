@@ -2,20 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 
 import ThemeContext from "../../context/ThemeContext";
 
-import Search from "../Search/Search";
 import Overview from "../Overview/Overview";
 import Details from "../Details/Details";
 import Chart from "../Chart/Chart";
-import ThemeIcon from "../ThemeIcon/ThemeIcon";
 import Header from "../Header/Header";
 
 import StockContext from "../../context/StockContext";
 
-import { fetchStockDetails, quoteStock } from "../../utils/api/stock-api";
+import { fetchStockDetails, fetchQuote } from "../../utils/api/stock-api";
 
 export default function Dashboard() {
   const { darkMode } = useContext(ThemeContext)
-  const { stockSymbol, setStockSymbol } = useContext(StockContext)
+  const { stockSymbol } = useContext(StockContext)
 
   const [stockDetails, setStockDetails] = useState({})
   const [quote, setQuote] = useState({})
@@ -28,7 +26,7 @@ export default function Dashboard() {
     }
 
     const updateStockOverview = async () => {
-      const result = await quoteStock(stockSymbol)
+      const result = await fetchQuote(stockSymbol)
 
       if (result) {
         setQuote(result)
@@ -40,10 +38,6 @@ export default function Dashboard() {
     updateStockDetails()
     updateStockOverview()
   }, [stockSymbol])
-
-  const formatQuoteAttribute = (attribute) => {
-    return attribute ? attribute : "N/A"
-  }
 
   return (
     <div
@@ -60,9 +54,9 @@ export default function Dashboard() {
       <div className="p-2">
         <Overview
           symbol={stockSymbol}
-          price={formatQuoteAttribute(quote.pc)}
-          change={formatQuoteAttribute(quote.d)}
-          changePercent={formatQuoteAttribute(quote.dp)}
+          price={quote.pc}
+          change={quote.d}
+          changePercent={quote.dp}
           currency={stockDetails.currency}
         />
       </div>

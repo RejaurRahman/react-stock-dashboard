@@ -6,7 +6,7 @@ import ThemeContext from "../../context/ThemeContext";
 
 import { searchSymbol } from "../../utils/api/stock-api";
 
-import { SearchIcon } from "@heroicons/react/solid";
+import { SearchIcon, XIcon } from "@heroicons/react/solid";
 
 export default function Search() {
   const { darkMode } = useContext(ThemeContext)
@@ -14,14 +14,21 @@ export default function Search() {
   const [bestMatches, setBestMatches] = useState([])
 
   const updateBestMatches = async () => {
-    const searchResults = await searchSymbol(input)
-    const result = searchResults.result
+    if (input) {
+      const searchResults = await searchSymbol(input)
+      const result = searchResults.result
 
-    if (result) {
-      setBestMatches(result.splice(0, 10));
-    } else {
-      setBestMatches([])
+      if (result) {
+        setBestMatches(result)
+      } else {
+        setBestMatches([])
+      }
     }
+  }
+
+  const clear = () => {
+    setInput("")
+    setBestMatches([])
   }
 
   return (
@@ -44,8 +51,16 @@ export default function Search() {
           }
         }}
       />
-      <button onClick={updateBestMatches}>
-        <SearchIcon className="h-6 w-6 m-2 fill-neutral-500" />
+      {input && (
+        <button onClick={clear} className="m-1">
+          <XIcon className="h-4 w-4 fill-gray-500" />
+        </button>
+      )}
+      <button
+        onClick={updateBestMatches}
+        className="h-8 w-8 bg-indigo-600 rounded-md flex justify-center items-center m-1 p-2"
+      >
+        <SearchIcon className="h-4 w-4 fill-gray-100" />
       </button>
       {bestMatches.length > 0 ? <SearchResults results={bestMatches} /> : null}
     </div>

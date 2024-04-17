@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { intradayData } from "../../constants/mock";
-
 import Button from "../Button/Button";
 import Card from "../Card/Card";
 
@@ -19,9 +17,15 @@ import {
   Tooltip,
 } from "recharts";
 
-export default function Chart() {
-  const chartFilters = ["1D", "1W", "1M", "1Y"]
+import {
+  createDate,
+  convertDateToUnixTimestamp,
+  convertUnixTimestampToDate,
+} from "../../utils/helpers/date-helper";
 
+import { chartConfig } from "../../constants/config";
+
+export default function Chart() {
   const [filter, setFilter] = useState("1D")
 
   const { darkMode } = useContext(ThemeContext)
@@ -30,49 +34,57 @@ export default function Chart() {
 
   const [data, setData] = useState([])
 
-  const convertDateToUnixTimestamp = (date) => {
-    return Math.floor(date.getTime() / 1000)
-  }
-
   const formatData = (data) => {
     return data.c.map((item, index) => {
       return {
         value: item.toFixed(2),
-        time: data.t
+        date: convertUnixTimestampToDate(data.t[index])
       }
     })
 
     return data
   }
 
-  const chartFilters2 = {
-    "1D": { resolution: 1, seconds: 60 * 60 * 24 },
-    "1W": { resolution: 1, seconds: 60 * 60 * 24 },
-    "1M": { resolution: 1, seconds: 60 * 60 * 24 },
-    "1Y": { resolution: 1, seconds: 60 * 60 * 24 }
-  }
-
   useEffect(() => {
+    const getDateRange = () => {
+      const { days, weeks, months, years } = chartConfig[filter]
+
+      const endDate = new Date()
+      const startDate = createDate(endDate, -days, -weeks, -months, -years)
+
+      const startTimestampUnix = convertDateToUnixTimestamp(startDate)
+      const endTimestampUnix = convertDateToUnixTimestamp(endDate)
+
+      return { startTimestampUnix, endTimestampUnix }
+    }
+
     const updateChartData = async () => {
-      const today = new Date()
-      const oneDay = 60 * 60 * 24
+      try {
+        const { startTimestampUnix, endTimestampUnix } = getDateRange()
+        const resolution = chartConfig[filter].resolution
 
-      const result = await fetchHistoricalData(
-        stockSymbol,
-        convertDateToUnixTimestamp(today) - oneDay,
-        convertDateToUnixTimestamp(today)
-      )
+        const result = await fetchHistoricalData(
+          stockSymbol,
+          resolution,
+          startTimestampUnix,
+          endTimestampUnix
+        )
 
-      setData(formatData(result))
+        setData(formatData(result))
+      } catch (error) {
+        console.log(error)
+
+        setData([])
+      }
     }
 
     updateChartData()
-  }, [stockSymbol])
+  }, [stockSymbol, filter])
 
   return (
     <Card>
       <ul className="flex absolute top-2 right-2 z-40">
-        {chartFilters.map((item) => (
+        {Object.keys(chartConfig).map((item) => (
           <li key={item}>
             <Button
               text={item}
@@ -113,7 +125,7 @@ export default function Chart() {
             fillOpacity={1}
             strokeWidth={0.5}
           />
-          <XAxis dataKey="time" />
+          <XAxis dataKey="date" />
           <YAxis domain={["dataMin", "dataMax"]} />
         </AreaChart>
       </ResponsiveContainer>

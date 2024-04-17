@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import "./App.css";
-
 import Dashboard from "./components/Dashboard/Dashboard";
 
 import StockContext from "./context/StockContext";
@@ -9,7 +7,7 @@ import ThemeContext from "./context/ThemeContext";
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false)
-  const [stockSymbol, setStockSymbol] = useState("AAPL")
+  const [stockSymbol, setStockSymbol] = useState("FB")
 
   useEffect(() => {
     console.log(stockSymbol)
