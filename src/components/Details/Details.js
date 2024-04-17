@@ -6,21 +6,21 @@ import ThemeContext from "../../context/ThemeContext";
 
 import Card from "../Card/Card";
 
-export default function Details() {
+export default function Details({ details }) {
   const { darkMode } = useContext(ThemeContext)
 
   const detailsList = {
-    Exchange: "Exchange",
-    Country: "Country",
-    Sector: "Sector",
-    MarketCapitalization: "Market Capitalization",
-    DividendYield: "Dividend Yield",
-    PERatio: "PE Ratio",
-    EPS: "EPS"
+    name: "Name",
+    country: "Country",
+    currency: "Currency",
+    exchange: "Exchange",
+    ipo: "IPO Date",
+    marketCapitalization: "Market Capitalization",
+    finnhubIndustry: "Industry"
   }
 
   const convertToBillion = (number) => {
-    return (number / 1000000000).toFixed(2)
+    return (number / 1000).toFixed(2)
   }
 
   return (
@@ -35,9 +35,9 @@ export default function Details() {
             <li key={item} className="flex-1 flex justify-between items-center">
               <span>{detailsList[item]}</span>
               <span className="font-bold">
-                {item === "MarketCapitalization"
-                  ? `${convertToBillion(companyDetails[item])}B`
-                  : companyDetails[item]}
+                {item === "marketCapitalization"
+                  ? `${convertToBillion(details[item])}B`
+                  : details[item]}
               </span>
             </li>
           );

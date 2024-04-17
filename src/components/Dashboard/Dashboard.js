@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import ThemeContext from "../../context/ThemeContext";
 
@@ -7,9 +7,27 @@ import Overview from "../Overview/Overview";
 import Details from "../Details/Details";
 import Chart from "../Chart/Chart";
 import ThemeIcon from "../ThemeIcon/ThemeIcon";
+import Header from "../Header/Header";
+
+import StockContext from "../../context/StockContext";
+
+import { fetchStockDetails } from "../../utils/api/stock-api";
 
 export default function Dashboard() {
   const { darkMode } = useContext(ThemeContext)
+  const { stockSymbol, setStockSymbol } = useContext(StockContext);
+
+  const [stockDetails, setStockDetails] = useState({});
+
+  useEffect(() => {
+    const updateStockDetails = async () => {
+      const result = await fetchStockDetails(stockSymbol)
+
+      setStockDetails(result)
+    }
+
+    updateStockDetails()
+  }, [stockSymbol])
 
   return (
     <div
@@ -18,12 +36,7 @@ export default function Dashboard() {
       }`}
     >
       <div className="col-span-1 md:col-span-2 xl:col-span-3 row-span-1 flex justify-start items-center">
-        <div className="xl:px-32">
-          <h1 className="text-5xl">Apple Inc.</h1>
-          <Search />
-        </div>
-
-        <ThemeIcon />
+        <Header name={stockDetails.name} />
       </div>
       <div className="md:col-span-2 row-span-4 p-2">
         <Chart />
@@ -37,7 +50,7 @@ export default function Dashboard() {
         />
       </div>
       <div className="row-span-2 xl:row-span-3 p-2">
-        <Details />
+        <Details details={stockDetails} />
       </div>
     </div>
   )
