@@ -9,8 +9,8 @@ export default function Search() {
 
   return (
     <div
-      className={`flex items-center my-4 bg-white border-2 border-neutral-200 rounded-md relative z-50 ${
-        darkMode ? "bg-gray-900 border-gray-800" : null
+      className={`flex items-center my-4 border-2 rounded-md relative z-50 ${
+        darkMode ? "bg-gray-900 border-gray-800" : "bg-white border-neutral-200"
       }`}
     >
       <svg
@@ -35,17 +35,17 @@ export default function Search() {
         placeholder="Search stock..."
       />
       <ul
-        className={`absolute top-12 bg-white border-2 border-neutral-200 w-full rounded-md peer-focus:block hidden ${
-          darkMode ? "bg-gray-900 border-1 border-gray-800" : null
+        className={`absolute top-12 border-2 w-full rounded-md peer-focus:block hidden ${
+          darkMode
+            ? "bg-gray-900 border-gray-800"
+            : "bg-white border-neutral-200 "
         }`}
       >
         {sampleSearchOptions.bestMatches.map((item) => {
-          console.log(item)
-
           return (
-            <li
-              className={`cursor-pointer p-4 m-2 flex items-center justify-between rounded-md hover:bg-indigo-200 ${
-                darkMode ? "hover:bg-indigo-600" : null
+            <li key={item["1. symbol"]}
+              className={`cursor-pointer p-4 m-2 flex items-center justify-between rounded-md ${
+                darkMode ? "hover:bg-indigo-600" : "hover:bg-indigo-200 "
               }`}
             >
               <span>{item["1. symbol"]}</span>

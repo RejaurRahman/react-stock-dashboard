@@ -30,8 +30,6 @@ export default function Chart() {
       data.push({ time: item[0], value: item[1]["4. close"] })
     })
 
-    console.log(data)
-
     return data
   }
 
@@ -39,7 +37,7 @@ export default function Chart() {
     <Card>
       <ul className="flex absolute top-2 right-2 z-40">
         {chartFilters.map((item) => (
-          <li>
+          <li key={item}>
             <Button
               text={item}
               active={filter === item}
