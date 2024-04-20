@@ -41,8 +41,6 @@ export default function Chart() {
         date: convertUnixTimestampToDate(data.t[index])
       }
     })
-
-    return data
   }
 
   useEffect(() => {

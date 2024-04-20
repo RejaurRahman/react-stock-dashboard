@@ -6,7 +6,7 @@ import ThemeContext from "../../context/ThemeContext";
 
 import { searchSymbol } from "../../utils/api/stock-api";
 
-import { SearchIcon, XIcon } from "@heroicons/react/solid";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 export default function Search() {
   const { darkMode } = useContext(ThemeContext)
@@ -55,14 +55,14 @@ export default function Search() {
       />
       {input && (
         <button onClick={clear} className="m-1">
-          <XIcon className="h-4 w-4 fill-gray-500" />
+          <XMarkIcon className="h-4 w-4 fill-gray-500" />
         </button>
       )}
       <button
         onClick={updateBestMatches}
         className="h-8 w-8 bg-indigo-600 rounded-md flex justify-center items-center m-1 p-2 transition duration-300 hover:ring-2 ring-indigo-400"
       >
-        <SearchIcon className="h-4 w-4 fill-gray-100" />
+        <MagnifyingGlassIcon className="h-4 w-4 fill-gray-100" />
       </button>
       {input && bestMatches.length > 0 ? (
         <SearchResults results={bestMatches} />
